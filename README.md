@@ -1,111 +1,69 @@
-# 🔧 AutoTune_Lab
+# AutoTune_Lab
 
-**Automated Model Optimization & Tuning Laboratory**
+**Real-time vocal processing for karaoke** — pitch correction, reverb, echo, EQ.
 
-AutoTune_Lab is a comprehensive lab for automated model tuning, quantization, inference optimization, and benchmarking. It leverages a curated set of reference repos from the AI ecosystem to provide a unified workflow for finding the optimal model configuration.
+Xử lý giọng hát từ mic real-time trước khi ra loa. Dùng VST plugins (open-source + REAPER stock) chạy trên Windows.
 
-## 📂 Structure
+## Flow
 
 ```
-AutoTune_Lab/
-├── references/          # Symlinks to upstream repos (read-only)
-│   ├── olive/           # Microsoft Olive — model optimization toolkit
-│   ├── optimum/         # HuggingFace Optimum — inference/training optimization
-│   ├── autoawq/         # Auto AWQ — automated GPTQ quantization
-│   ├── tvm/             # Apache TVM — compiler-based autotuning
-│   ├── auto-pytorch/    # AutoML for PyTorch
-│   ├── optimization/    # General optimization tools
-│   ├── galore/          # GaLore optimizer
-│   ├── litgpt/          # Lightning GPT
-│   ├── torchao/         # PyTorch quantization & sparsity
-│   ├── torchtune/       # PyTorch LLM fine-tuning
-│   ├── flash-attention/ # IO-aware attention (2-4x faster)
-│   ├── bitsandbytes/    # 8-bit/4-bit quantization
-│   ├── exllamav2/       # Fast quantized inference
-│   ├── peft/            # Parameter-efficient fine-tuning
-│   ├── sglang/          # Fast LLM serving
-│   ├── llama-factory/   # One-stop fine-tuning platform
-│   ├── axolotl/         # Streamlined fine-tuning toolkit
-│   ├── tokenlab/        # Token usage & cost tracker
-│   ├── routerlab/       # Multi-provider AI routing
-│   ├── benchlab/        # Multi-provider benchmarking
-│   └── evaluation/      # Evaluation benchmarks (LM harness, MTEB, etc.)
-├── scripts/             # Automation scripts
-├── configs/             # Tuning configs (per model, per hardware)
-├── benchmarks/          # Benchmark results & reports
-├── results/             # Tuned model outputs & comparison reports
-└── docs/                # Workflow documentation
+Mic → [Noise Gate] → [EQ] → [Pitch Correction] → [Reverb] → [Echo/Delay] → [Compressor] → Loa
 ```
 
-## 🎯 Core Workflows
+## Quick Start (Windows)
 
-### 1. Quantization Pipeline
-```bash
-# Compare quantization methods on a target model
-python scripts/quantize_compare.py --model meta-llama/Llama-3-8B --methods awq,gptq,bitsandbytes
+### 1. Cài đặt
+```powershell
+# ASIO Driver (giảm latency)
+https://asio4all.org/
+
+# REAPER (VST host, eval 60 ngày full tính năng)
+https://www.reaper.fm/download.php
 ```
 
-### 2. Inference Optimization
-```bash
-# Auto-tune inference config for target hardware
-python scripts/infer_autotune.py --model path/to/model --hardware RTX4090 --target latency_ms
+### 2. Pitch Correction — OpenTune
+[github.com/bemtorres/opentune](https://github.com/bemtorres/opentune) — zero-latency, granular synthesis, scale snapping.
+
+Build từ source (cần Visual Studio + JUCE Projucer) hoặc download binary từ Releases.
+
+### 3. Load FX Chain trong REAPER
+```
+Insert track → Arm record (Input: Mic) → FX button → Add:
+  ReaEQ → OpenTune → ReaVerbate → ReaDelay → ReaComp
 ```
 
-### 3. Hyperparameter Search
-```bash
-# Optuna-based hyperparameter optimization
-python scripts/hp_search.py --config configs/llama3_8b.yaml --trials 50
+### 4. Cấu hình nhanh
+| Tham số | Karaoke | Vocal Warm | T-Pain |
+|---------|---------|------------|--------|
+| Retune Speed | 60 | 50 | 100 |
+| Scale | C Major | C Major | C Minor |
+| Reverb Mix | 25% | 20% | 35% |
+| Delay Feed. | 15% | — | 35% |
+| Comp Ratio | 3:1 | 4:1 | 4:1 |
+
+## Presets
+Xem `presets/*.yaml` — 3 preset dạng YAML (karaoke_standard, vocal_warm, tpain_effect)
+Export .RfxChain từ REAPER để share chain.
+
+## Project Structure
+```
+├── docs/           # Hướng dẫn cài đặt + presets
+├── presets/        # YAML preset cho từng phong cách
+├── vst-plugins/    # Symlink đến VST plugins đã cài
+├── hosts/          # Symlink đến VST host apps
+├── tools/          # Utility scripts (tùy chọn)
+└── references/     # Source code tham khảo
 ```
 
-### 4. Benchmark & Compare
-```bash
-# Full benchmark across providers/configs
-python scripts/benchmark_all.py --model path/to/model --configs configs/ --out results/
-```
+## References
+| Repo | Chức năng |
+|------|-----------|
+| [bemtorres/opentune](https://github.com/bemtorres/opentune) | Real-time pitch correction VST |
+| [breakfastquay/rubberband](https://github.com/breakfastquay/rubberband) | Pitch shifting library (C++) |
+| [surina.net/soundtouch](https://www.surina.net/soundtouch/) | Tempo/pitch library |
+| [mmckegg/freeverb](https://github.com/mmckegg/freeverb) | Reverb algorithm |
+| [juce-framework/JUCE](https://github.com/juce-framework/JUCE) | C++ audio plugin framework |
 
-## 🔗 Reference Repos
-
-| Repo | Role in AutoTune | Key APIs |
-|------|-----------------|----------|
-| **Olive** | End-to-end model optimization pipeline | `olive optimize`, `olive finetune` |
-| **Optimum** | Hardware-specific optimization | `optimum.onnxruntime`, `optimum.bettertransformer` |
-| **AutoAWQ** | Automated AWQ quantization | `AutoAWQForCausalLM`, `awq_config` |
-| **TVM** | Compiler-level autotuning | `tvm.autotvm`, `tvm.tir` |
-| **TorchAO** | PyTorch native quantization | `torchao.quantize`, `torchao.sparsity` |
-| **BitsAndBytes** | 4/8-bit quantization | `BitsAndBytesConfig(load_in_4bit=True)` |
-| **ExLlamaV2** | Fast quantized inference | `ExLlamaConfig`, `ExLlamaTokenizer` |
-| **GaLore** | Memory-efficient training | `GaLoreAdamW`, `GaLoreOptimizer` |
-| **PEFT** | LoRA/QLoRA fine-tuning | `LoraConfig`, `get_peft_model` |
-| **SGlang** | High-performance serving | `sglang engine`, `sglang benchmark` |
-
-## 🛠️ Quick Start
-
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. Set model path
-export MODEL_PATH=meta-llama/Llama-3-8B
-
-# 3. Run auto-quantization sweep
-python scripts/quantize_compare.py --model $MODEL_PATH --output results/
-
-# 4. Run inference benchmark
-python scripts/benchmark_all.py --model results/best_quant/ --out results/bench/
-```
-
-## 📊 Evaluation Metrics
-
-| Metric | Tool | Target |
-|--------|------|--------|
-| Inference Latency | sglang / llama.cpp | < 50ms/token |
-| Memory Usage | nvidia-smi / torch.cuda | < 8GB VRAM |
-| Perplexity | lm-evaluation-harness | < baseline + 5% |
-| Quality (MMLU) | lm-evaluation-harness | > baseline - 2% |
-| Cost/Token | TokenLab | Minimize |
-
-## 📝 Notes
-
-- All reference repos are **read-only symlinks** — modifications happen in `scripts/` and `configs/`
-- Results are versioned in `results/` with timestamps
-- Each optimization run produces a comparison report in `benchmarks/`
+## Ghi chú
+- **Latency ~6ms** với ASIO driver + buffer 128 samples — không cảm nhận được delay
+- **Không cần mua plugin**: toàn bộ dùng open-source hoặc stock REAPER

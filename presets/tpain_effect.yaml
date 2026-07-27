@@ -1,0 +1,30 @@
+# Preset: T-Pain Effect
+# Autotune mạnh, robotic
+
+chain:
+  - plugin: ReaEQ
+    params:
+      low_cut: 100Hz
+      high_shelf: +3dB @ 8kHz
+  - plugin: OpenTune
+    params:
+      retune_speed: 100
+      scale: C Minor
+      formant: 30
+      noise_gate: -50dB
+  - plugin: ReaDelay
+    params:
+      delay_time: 1/4
+      feedback: 35
+      low_pass: 6kHz
+  - plugin: ReaVerbate
+    params:
+      room_size: 50
+      damping: 30
+      mix: 35
+  - plugin: ReaComp
+    params:
+      ratio: 4:1
+      threshold: -18dB
+      attack: 1ms
+      release: 30ms

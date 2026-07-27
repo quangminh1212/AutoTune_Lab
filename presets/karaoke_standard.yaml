@@ -1,0 +1,30 @@
+# Preset: Karaoke Standard
+# Phòng khách, hát thường
+
+chain:
+  - plugin: ReaEQ
+    params:
+      low_cut: 80Hz
+      high_shelf: +2dB @ 8kHz
+  - plugin: OpenTune
+    params:
+      retune_speed: 60
+      scale: C Major
+      formant: 50
+      noise_gate: -45dB
+  - plugin: ReaVerbate
+    params:
+      room_size: 35
+      damping: 40
+      mix: 25
+  - plugin: ReaDelay
+    params:
+      delay_time: 1/8
+      feedback: 15
+      low_pass: 8kHz
+  - plugin: ReaComp
+    params:
+      ratio: 3:1
+      threshold: -18dB
+      attack: 5ms
+      release: 50ms

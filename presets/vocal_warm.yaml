@@ -1,0 +1,29 @@
+# Preset: Vocal Warm
+# Giọng ấm, tự nhiên — che chắn giọng yếu
+
+chain:
+  - plugin: ReaEQ
+    params:
+      low_cut: 80Hz
+      peak: +3dB @ 300Hz
+      high_shelf: -1dB @ 10kHz
+  - plugin: OpenTune
+    params:
+      retune_speed: 50
+      scale: C Major
+      formant: 70
+      noise_gate: -50dB
+  - plugin: ReaVerbate
+    params:
+      room_size: 25
+      damping: 60
+      mix: 20
+  - plugin: ReaComp
+    params:
+      ratio: 4:1
+      threshold: -20dB
+      attack: 3ms
+      release: 80ms
+  - plugin: ReaLimit
+    params:
+      ceiling: -1dB

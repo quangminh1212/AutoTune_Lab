@@ -1,9 +1,16 @@
-# AutoTune_Lab — Reference Repo Setup
+# AutoTune_Lab — Reference Repos
 
-Run this once after cloning to restore symlinks to local reference repos.
-Skips any target that doesn't exist (safe for fresh clones).
+Source code repos cho audio/karaoke autotune — tham khảo thuật toán.
 
-Usage:
 ```bash
-bash setup_references.sh
+bash setup_references.sh  # Tạo symlinks (bỏ qua target không tồn tại)
 ```
+
+| Folder | Source | Mô tả |
+|--------|--------|-------|
+| `opentune` | bemtorres/opentune | Zero-latency pitch correction VST |
+| `rubberband` | breakfastquay/rubberband | Pitch shifting library |
+| `soundtouch` | surina.net/soundtouch | Tempo/pitch library |
+| `freeverb` | mmckegg/freeverb | Reverb algorithm |
+| `juce` | juce-framework/JUCE | Audio plugin framework |
+| `hachi-tune` | KCKT0112/HachiTune | Neural pitch editor |

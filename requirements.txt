@@ -1,0 +1,25 @@
+# AutoTune_Lab dependencies
+# Core
+torch>=2.1.0
+transformers>=4.36.0
+accelerate>=0.25.0
+
+# Quantization & optimization
+optimum>=1.16.0
+auto-gptq>=0.6.0
+peft>=0.7.0
+bitsandbytes>=0.41.0
+
+# Benchmarks & evaluation
+lm-eval>=0.4.0
+datasets>=2.14.0
+
+# Hyperparameter search
+optuna>=3.3.0
+
+# Utils
+numpy>=1.24.0
+pandas>=2.0.0
+pyyaml>=6.0
+tqdm>=4.65.0
+rich>=13.0.0

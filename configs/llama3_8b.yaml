@@ -1,0 +1,50 @@
+# AutoTune config: Meta Llama 3 8B
+model:
+  name: meta-llama/Llama-3-8B
+  family: llama
+  params: 8B
+  dtype: bfloat16
+
+quantization:
+  methods:
+    - name: awq
+      group_size: 128
+      zero_point: true
+      desc_act: true
+    - name: gptq
+      bits: 4
+      group_size: 128
+      damp_percent: 0.01
+    - name: bitsandbytes
+      load_in_4bit: true
+      bnb_4bit_use_double_quant: true
+      bnb_4bit_compute_dtype: bfloat16
+
+inference:
+  max_length: 4096
+  batch_size: 1
+  device: cuda
+
+target:
+  - hardware: RTX4090
+    vram: 24
+    metrics:
+      latency_ms_per_token: 50
+      memory_gb: 8
+  - hardware: RTX3090
+    vram: 24
+    metrics:
+      latency_ms_per_token: 60
+      memory_gb: 10
+  - hardware: RTX3060
+    vram: 12
+    metrics:
+      latency_ms_per_token: 100
+      memory_gb: 6
+
+benchmarks:
+  tasks:
+    - mmlu
+    - hellaswag
+    - arc_challenge
+  shots: 5
